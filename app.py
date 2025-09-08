@@ -7,7 +7,7 @@ import pandas as pd
 app = FastAPI()
 
 # Mount static folder for CSS/JS
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Load templates
 templates = Jinja2Templates(directory="templates")

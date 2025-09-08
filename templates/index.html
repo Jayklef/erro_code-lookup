@@ -3,20 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <title>Error Code Lookup</title>
-    <link rel="stylesheet" href="/static/style.css" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <h2>🔍 Error Code Lookup</h2>
-    <input type="text" id="codeInput" placeholder="Enter error code" />
-    <button onclick="searchCode()">Search</button>
+  <body class="bg-light">
+    <div class="container d-flex vh-100">
+      <div class="row justify-content-center align-self-center w-100">
+        <div class="col-md-6">
+          <div class="card shadow-lg p-4">
+            <h2 class="text-center mb-4">Error Code Lookup</h2>
 
-    <div id="result"></div>
+            <!-- Search Form -->
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                id="codeInput"
+                class="form-control"
+                placeholder="Enter error code"
+              />
+              <button class="btn btn-primary" onclick="searchCode()">
+                Search
+              </button>
+            </div>
+
+            <!-- Results -->
+            <div id="result"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
       async function searchCode() {
         const code = document.getElementById("codeInput").value;
         const resultDiv = document.getElementById("result");
-        resultDiv.innerHTML = "Loading...";
+        resultDiv.innerHTML = `<div class="text-center text-muted">Loading...</div>`;
 
         try {
           const response = await fetch(`/lookup?code=${code}`);
@@ -24,17 +51,21 @@
 
           if (response.ok) {
             resultDiv.innerHTML = `
-            <div class="card">
-              <h3>${data.code} - ${data.message}</h3>
+            <div class="alert alert-success mt-3">
+              <h5>${data.code} - ${data.message}</h5>
               <p><b>Explanation:</b> ${data.explanation}</p>
               <p><b>Action Plan:</b> ${data.action_plan}</p>
             </div>
           `;
           } else {
-            resultDiv.innerHTML = `<p class="error">${data.error}</p>`;
+            resultDiv.innerHTML = `
+            <div class="alert alert-danger mt-3">${data.error}</div>
+          `;
           }
         } catch (err) {
-          resultDiv.innerHTML = `<p class="error">Server error</p>`;
+          resultDiv.innerHTML = `
+          <div class="alert alert-danger mt-3">Server error</div>
+        `;
         }
       }
     </script>

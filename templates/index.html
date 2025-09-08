@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Error Code Lookup</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <h2>🔍 Error Code Lookup</h2>
+    <input type="text" id="codeInput" placeholder="Enter error code" />
+    <button onclick="searchCode()">Search</button>
+
+    <div id="result"></div>
+
+    <script>
+      async function searchCode() {
+        const code = document.getElementById("codeInput").value;
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = "Loading...";
+
+        try {
+          const response = await fetch(`/lookup?code=${code}`);
+          const data = await response.json();
+
+          if (response.ok) {
+            resultDiv.innerHTML = `
+            <div class="card">
+              <h3>${data.code} - ${data.message}</h3>
+              <p><b>Explanation:</b> ${data.explanation}</p>
+              <p><b>Action Plan:</b> ${data.action_plan}</p>
+            </div>
+          `;
+          } else {
+            resultDiv.innerHTML = `<p class="error">${data.error}</p>`;
+          }
+        } catch (err) {
+          resultDiv.innerHTML = `<p class="error">Server error</p>`;
+        }
+      }
+    </script>
+  </body>
+</html>
